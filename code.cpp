@@ -80,8 +80,6 @@ public:
 			base=base*base%mod;
 			n>>=1;
 		}
-<<<<<<< Updated upstream
-=======
 		return ans;
 	}
 	void cantor(){
@@ -177,7 +175,6 @@ public:
     int Catalan(int n,int mod){
         return Combination(2*n,n,mod)*inv[n+1]%mod;
     }
->>>>>>> Stashed changes
 }math;
 
 class sorts{
@@ -364,8 +361,6 @@ private:
 	int sst[1200],ttop;
 };
 
-<<<<<<< Updated upstream
-=======
 class Monotonic_stack{
 public:
 	std::stack<int> st;
@@ -386,7 +381,6 @@ private:
 	}
 };
 
->>>>>>> Stashed changes
 class qqueue{
 public:
 	qqueue(){
@@ -679,8 +673,6 @@ class heap{
 		}
 };
 
-<<<<<<< Updated upstream
-=======
 class BinaryTree{
 private:
 	int fa[32],le[32],re[32],v[32],n,r,sleaf;
@@ -817,7 +809,6 @@ public:
 	}
 };
 
->>>>>>> Stashed changes
 class high{
 public:
 	high& operator=(const char*);
