@@ -557,7 +557,7 @@ public:
 	}
 };
 
-class line_array{
+class segment_tree{
 private:
 	int a[120],b[480],c[480],n,m,p,q,r,s;
 	void build(int k,int l,int r){
