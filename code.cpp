@@ -55,15 +55,20 @@ public:
 	    		return false;
 	    return true;
 	}
-	bool prime[Math];
-	void make_prime(int n){
-		prime[0]=prime[1]=0;
-		for(int i=2;i*i<=n;i++)
-			if(prime[i])
-				for(int j=2*i;j<n;j+=i)
-					prime[j]=false;
-		return;
-	}
+	bool prime[Math],visit[Math];
+    void make_prime(int n){
+        int primesize=0;
+        memset(prime,1,sizeof(prime));
+        prime[1]=false;
+        for(int i=2;i<=n;i++){
+            if(prime[i])
+                visit[++primesize]=i;
+            for(int j=1;j<=primesize&&i*visit[j]<=n;j++){
+                prime[i*visit[j]]=false;
+                if(i%visit[j]==0)break;
+            }
+        }
+    }
 	int gcd(int x,int y){
 		if(x%y==0)return y;
 		else return gcd(y,x%y);
