@@ -17,30 +17,27 @@
 
 //using namespace std;
 
-class sys_cons{
-public:
- 	static constexpr double eps=0.000001;
-	int gmax(int x,int y){return x>y?x:y;}
-	int gmin(int x,int y){return x<y?x:y;}
-	double gmax(double x,double y){return x>y?x:y;}
-	double gmin(double x,double y){return x<y?x:y;}
-	bool jmax(int x,int y){return x>y;}
-	bool jmin(int x,int y){return x<y;}
-	bool jmax(double x,double y){return x>y;}
-	bool jmin(double x,double y){return x<y;}
-	bool jieq(double x,double y){return fabs(x-y)<eps;}
-	void sl(){Sleep(500);}
-	void cl(){system("cls");}
-	void en(){puts("");}
-	void sswap(int &x,int &y){int p=x;x=y;y=p;}
-	inline bool isdigit(char x){return (x>='0'&&x<='9');}
-	inline int read(){
-		int x=0,flag=1;char c=getchar();
-		while(!isdigit(c)){if(c=='-')flag=-1;c=getchar();}
-		while(isdigit(c)){x=(x<<3)+(x<<1)+c-'0';c=getchar();}
-		return flag*x;
-	}
-}cons;
+const double eps=0.000001;
+int gmax(int x,int y){return x>y?x:y;}
+int gmin(int x,int y){return x<y?x:y;}
+double gmax(double x,double y){return x>y?x:y;}
+double gmin(double x,double y){return x<y?x:y;}
+bool jmax(int x,int y){return x>y;}
+bool jmin(int x,int y){return x<y;}
+bool jmax(double x,double y){return x>y;}
+bool jmin(double x,double y){return x<y;}
+bool jieq(double x,double y){return fabs(x-y)<eps;}
+void sl(){Sleep(500);}
+void cl(){system("cls");}
+void en(){puts("");}
+void sswap(int &x,int &y){int p=x;x=y;y=p;}
+inline bool isdigit(char x){return (x>='0'&&x<='9');}
+inline int read(){
+	int x=0,flag=1;char c=getchar();
+	while(!isdigit(c)){if(c=='-')flag=-1;c=getchar();}
+	while(isdigit(c)){x=(x<<3)+(x<<1)+c-'0';c=getchar();}
+	return flag*x;
+}
 
 class math_fuc{
 public:
@@ -103,7 +100,7 @@ public:
 			ans+=k*fac[n-i];
 		}
 		printf("Cantor.no:%d",ans);
-		cons.en();
+		en();
 	}
 	void decantor(){
 		factor(Mod,Math);
@@ -199,9 +196,9 @@ public:
 	}
 private:
 	void exch(){
-		cons.sl();
-		cons.sl();
-		cons.cl();
+		sl();
+		sl();
+		cl();
 		outpt();
 	}
 	void outpt(){
@@ -214,7 +211,7 @@ private:
 		int ans=0;
 		merger(1,n);
 		printf("There is %d inversions\n",ans);
-		cons.en();
+		en();
 	}
 	void merger(int l,int r){
 		if(l==r)return;
@@ -238,7 +235,7 @@ private:
 			while(a[i]<m)i++;
 			while(a[j]>m)j--;
 			if(i<=j)
-				cons.sswap(a[i++],a[j--]);
+				sswap(a[i++],a[j--]);
 		}while(i<=j);
 		if(l<j)quicker(l,j);
 		if(i<r)quicker(i,r);
@@ -277,11 +274,11 @@ private:
 		for(int i=1;i<=n;i++)
 			if(p[i]==0)
 				for(int j=w[i];j<=m;j++)
-					f[j]=cons.gmax(f[j],f[j-w[i]]+c[i]);
+					f[j]=gmax(f[j],f[j-w[i]]+c[i]);
 			else
 				for(int j=1;j<=p[i];j++)
 					for(int k=m;k>=w[i];k--)
-						f[k]=cons.gmax(f[k],f[k-w[i]]+c[i]);
+						f[k]=gmax(f[k],f[k-w[i]]+c[i]);
 		printf("%d",f[m]);
 	}
 	void D2(){
@@ -322,119 +319,6 @@ public:
 	***************/
 };
 
-class sstack{
-public:
-	sstack(){
-		ttop=0;
-		memset(sst,0,sizeof(sst));
-	}
-	bool spop(){
-		if(!ttop){
-			puts("Failed(A1)");
-			return 0;
-		}
-		else{
-			printf("%d",sst[ttop--]);
-			cons.en();
-			return 1;
-		}
-	}
-	bool spush(int d){
-		if(!(ttop-1000)){
-			puts("Failed(A2)");
-			return 0;
-		}
-		else{
-			sst[ttop++]=d;
-			return 1;
-		}
-	}
-	void slen(){
-		printf("%d",ttop);
-	}
-	bool sget(){
-		if(!ttop){
-			puts("NULL(A1)");
-			return 0;
-		}
-		else{
-			printf("%d",sst[ttop]);
-			return 1;
-		}
-	}
-private:
-	int sst[1200],ttop;
-};
-
-class Monotonic_stack{
-public:
-	std::stack<int> st;
-private:
-	bool isEmpty(){
-		return st.empty();
-	}
-	void pop(){
-		st.pop();
-	}
-	void push(int x){
-		while(!st.empty()&&st.top()>x)
-			st.pop();
-		st.push(x);
-	}
-	int top(){
-		return st.top();
-	}
-};
-
-class qqueue{
-public:
-	qqueue(){
-		qhead=qtail=qlen=0;
-		memset(qqu,0,sizeof(qqu));
-	}
-	bool qpop(){
-		if(!(qhead-qtail)){
-			puts("Failed(A3)");
-			return 0;
-		}
-		else{
-			printf("%d",qqu[qhead--]);
-			cons.en();
-			qlen--;
-			return 1;
-		}
-	}
-	bool qpush(){
-		if(qlen==100){
-			puts("Failed(A4)");
-			return 0;
-		}
-		else{
-			int d;
-			scanf("%d",&d);
-			qqu[(qtail+1)%100]=d;
-			qlen++;
-			return 1;
-		}
-	}
-	void qget(){
-		printf("%d",qlen);
-		cons.en();
-	}
-	bool qlon(){
-		if(!qlen){
-			puts("NULL(A3)");
-			return 0;
-		}
-		else{
-			printf("%d",qqu[qhead]);
-			return 1;
-		}
-	}
-private:
-	int qqu[102],qhead,qtail,qlen;
-};
-
 class ttree{
 	static const int N=1200,Maxdepth=210;
 private:
@@ -442,7 +326,7 @@ private:
 	int n,t,tot,v[N],fir[N*2],nxt[N*2],to[N*2],dep[N],f[N][Maxdepth],maxdep,L[N],R[N];
 	void init(int u,int fa){
 		dep[u]=dep[fa]+1;
-		maxdep=cons.gmin(maxdep,dep[u]);
+		maxdep=gmin(maxdep,dep[u]);
 		for(int i=0;i<=Maxdepth;i++)
 			f[u][i+1]=f[f[u][i]][i];
 		for(int e=fir[u];e;e=nxt[e]){
@@ -479,7 +363,7 @@ public:
 	}
 	int lca(int x,int y){
 		if(dep[x]<dep[y])
-			cons.sswap(x,y);
+			sswap(x,y);
 		for(int i=maxdep;i>=0;i--){
 			if(dep[f[x][i]]>=dep[y])
 				x=f[x][i];
@@ -564,7 +448,7 @@ public:
 
 class segment_tree{
 private:
-	int a[120],b[480],c[480],n,m,p,q,r,s;
+	int a[120],b[480],sum[480],n,m,p,q,r,s;
 	void build(int k,int l,int r){
 		if(l==r){
 			b[k]=a[l];
@@ -576,14 +460,14 @@ private:
 		b[k]=b[k*2]+b[k*2+1];
 	}
 	void add(int k,int l,int r,int v){
-		c[k]+=v;
+		sum[k]+=v;
 		b[k]+=(long long)v*(r-l+1);
 	}
 	void pushdown(int k,int l,int r,int mid){
-		if(c[k]==0)return;
-		add(k*2,l,mid,c[k]);
-		add(k*2+1,mid+1,r,c[k]);
-		c[k]=0;
+		if(sum[k]==0)return;
+		add(k*2,l,mid,sum[k]);
+		add(k*2+1,mid+1,r,sum[k]);
+		sum[k]=0;
 	}
 	void modify(int k,int l,int r,int x,int y,int v){
 		if(l>=x&&r<=y)
@@ -627,115 +511,6 @@ public:
 				printf("%d",query(1,1,n,q,r));
 			}
 		}
-	}
-};
-
-class heap{
-	private:
-		int hheap[120],n,m,p,q,r,maxn;
-		void put(int x){
-			int now,next;
-			hheap[++n]=x;
-			now=x;
-			while(now>1){
-				if(hheap[now]>=hheap[next])
-					break;
-				cons.sswap(hheap[now],hheap[next]);
-				now=next;
-			}
-		}
-		int get(){
-			int now=1,next,res=hheap[now];
-			res=hheap[1];
-			hheap[1]=hheap[n--];
-			while(now*2<=n){
-				next=now*2;
-				if(next<n&&hheap[next+1]<hheap[next])
-					next++;
-				if(hheap[now]<=hheap[next])
-					break;
-				cons.sswap(hheap[now],hheap[next]);
-				now=next;
-			}
-			return res;
-		}
-	public:
-		void run(){
-			printf("input the maxsize of the heap:");
-			scanf("%d",&maxn);
-			printf("input the operates' number:");
-			scanf("%d",&m);
-			n=1;
-			memset(hheap,0,sizeof(hheap));
-			for(int i=1;i<=m;i++){
-				scanf("%d",&p);
-				if(p==1){
-					scanf("%d",&q);
-					put(q);
-				}
-				else printf("%d\n",get());
-			}
-		}
-};
-
-class BinaryTree{
-private:
-	int fa[32],le[32],re[32],v[32],n,r,sleaf;
-	void crt(){
-		int p,k,lc,rc;
-		printf("n=");scanf("%d",&n);
-		for(int i=1;i<=n;i++){
-			scanf("%d%d%d%d",&p,&k,&lc,&rc);
-			v[p]=k;le[p]=lc;re[p]=rc;
-			if(lc)fa[lc]=p;
-			if(rc)fa[rc]=p;
-		}
-	}
-	int froot(){
-		for(int i=1;i<=n;i++)
-			if(!fa[i])
-				return 1;
-	}
-	void pror(int i){//prerootorder
-		if(i){
-			printf("%d ",v[i]);
-			pror(le[i]);
-			pror(re[i]);
-		}
-	}
-	void mior(int i){//midrootorder
-		if(i){
-			mior(le[i]);
-			printf("%d ",v[i]);
-			mior(re[i]);
-		}
-	}
-	void poor(int i){//postrootorder
-		if(i){
-			poor(le[i]);
-			poor(re[i]);
-			printf("%d ",v[i]);
-		}
-	}
-	void fleaves(int i){
-		if(i){
-			if(!(le[i]+re[i]))
-				printf("%d",i),sleaf++;
-			fleaves(le[i]);
-			fleaves(re[i]);
-		}
-	}
-	int gethigh(int i){
-		if(!i)return 0;
-		return cons.gmax(gethigh(le[i]),gethigh(re[i]))+1;
-	}
-	bool find(int i,int num){
-		if(!i)return 0;
-		if(v[i]!=num)return find(le[i],num)||find(re[i],num);
-	}
-public:
-	BinaryTree(){
-		sleaf=0;
 	}
 };
 
@@ -828,6 +603,11 @@ public:
 	high(int n){
 		*this=n;
 	}
+    void outpt(){
+        for(int i=this->num[0];i>=1;i--)
+            printf("%d",this->num[i]);
+        printf("\n");
+    }
 	friend int operator>(const high &x,const high &y){
 		if(x.num[0]!=y.num[0])return (x.num[0]>y.num[0]?1:-1);
 		for(int i=x.num[0];i>=1;i--)
@@ -837,7 +617,7 @@ public:
 	}
 	friend high operator+(const high &x,const high &y){
 		high z;
-		z.num[0]=cons.gmax(x.num[0],y.num[0]);
+		z.num[0]=gmax(x.num[0],y.num[0]);
 		for(int i=1;i<=z.num[0];i++){
 			z.num[i]=x.num[i]+y.num[i];
 			if(z.num[i]>x.carr){
@@ -1221,7 +1001,7 @@ public:
         s.push(u);instack[u]=1;
         for(int i=head[u];i!=1;i=e[i].nxt){
             v=e[i].v;
-            if(!dfn[v]||instack[v]){if(!dfn[v])tarjan(v);low[u]=cons.gmin(low[u],low[v]);}
+            if(!dfn[v]||instack[v]){if(!dfn[v])tarjan(v);low[u]=gmin(low[u],low[v]);}
         }
         if(dfn[u]==low[u]){
             cnt++;do{
