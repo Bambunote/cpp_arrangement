@@ -943,80 +943,107 @@ public:
 
 class graph{
 private:
-    const static int N=500,inf=1<<30;
-    int g[N][N],n,m,idx,k,cnt,dprim[N],dis[N],book[N],head[N],dfn[N],low[N],ingroup[N],instack[N];
-    std::stack<int> s;
-    struct edge{int v,nxt,val;}e[N];
+	const static int N=120,M=1200,inf=100010;
+	int n,m,g[N][N];
+	struct node{
+		int index,dist;
+		bool operator<(const node &x)const{return dist>x.dist;}
+	};
+	struct edge{int u,v,nxt,w;}edg[M];
+	int head[N],dis[N],cnt;
+	bool vis[N];
 public:
-    void add(int u,int v,int w){
-        e[cnt].v=v;
-        e[cnt].nxt=head[u];
-        head[u]=cnt++;
-        if(w==-1)return;
-    }
-    void init(){
-        scanf("%d%d",&n,&m);
-        for(int i=1;i<=m;i++){
-            int u,v,w;
-            scanf("%d%d%d",&u,&v,&w);
-            add(u,v,w);
-        }
-    }
-    void init_matrix(){
-        scanf("%d%d",&n,&m);
-        for(int i=1;i<=n;i++)
-            for(int j=1;j<=n;j++)
-                g[i][j]=inf;
-        for(int i=1;i<=m;i++){
-            int u,v,w;
-            scanf("%d%d%d",&u,&v,&w);
-            g[u][v]=g[v][u]=w;
-        }
-    }
-    int prim(){
-        init_matrix();
-        int count=1,sum=0;
-        for(int i=1;i<=n;i++)
-            dprim[i]=g[1][i];
-        book[1]=1;
-        int j=0,ans;
-        while(count<n){
-            ans=inf;
-            for(int i=1;i<=n;i++){
-                if(!book[i]&&dprim[i]<ans){
-                    ans=dprim[i];j=i;
-                }
-            }
-            book[j]=1;
-            count++;
-            sum+=dis[j];
-            for(int k=1;k<=n;k++)
-                if(!book[k]&&dprim[k]>g[j][k])
-                    dis[k]=g[j][k];
-        }
-        return sum;
-    }
-    void tarjan(int u){
-        int v;dfn[u]=low[u]=++idx;
-        s.push(u);instack[u]=1;
-        for(int i=head[u];i!=1;i=e[i].nxt){
-            v=e[i].v;
-            if(!dfn[v]||instack[v]){if(!dfn[v])tarjan(v);low[u]=gmin(low[u],low[v]);}
-        }
-        if(dfn[u]==low[u]){
-            cnt++;do{
-                v=s.top();s.pop();
-                instack[v]=0;
-                ingroup[v]=cnt;
-            }while(u!=v);
-        }
-    }
-    void strcon(){
-        init();
-        for(int i=1;i<=n;i++)
-            if(!dfn[i])
-                tarjan(i);
-    }
+	void add(int u,int v,int w){
+		edg[++cnt].u=u;
+		edg[cnt].v=v;
+		edg[cnt].w=w;
+		edg[cnt].nxt=head[u];
+		head[u]=cnt;
+		return;
+	}
+	void init_matrix(){
+		memset(g,0x7f,sizeof(g));
+		n=read();m=read();
+		bool both=true;
+		for(int i=1;i<=n;i++)
+			g[i][i]=0;
+		for(int i=1;i<=m;i++){
+			int u=read(),v=read(),w=read();
+			if(both){g[u][v]=g[v][u]=w;}
+			else g[u][v]=w;
+		}
+	}
+	void init_forward_star(){
+		memset(head,-1,sizeof(head));
+		n=read();m=read();
+		for(int i=1;i<=n;i++){
+			int u=read(),v=read(),w=read();
+			add(u,v,w);
+		}
+	}
+	void floyd(){
+		for(int k=1;k<=n;k++)
+			for(int i=1;i<=n;i++)
+				for(int j=1;j<=n;j++)
+					if(g[i][k]+g[k][j]<g[i][j])
+						g[i][j]=g[i][k]+g[k][j];
+	}
+	void dijkstra_heap(){
+		std::priority_queue<node> q;
+		memset(vis,0,sizeof(vis));
+		memset(dis,0x7f,sizeof(dis));
+		int s=read();
+		dis[s]=0;node t={s,0};q.push(t);
+		while(!q.empty()){
+			node x=q.top();q.pop();
+			int u=x.index;
+			if(vis[u])continue;
+			vis[u]=1;
+			for(int i=head[u];i;i=edg[i].nxt)
+				if(dis[edg[i].v]>dis[u]+edg[i].w){
+					dis[edg[i].v]=dis[u]+edg[i].w;
+					node t={edg[i].v,dis[edg[i].v]};
+					q.push(t);
+				}
+		}
+	}
+	void Bellman_ford(){
+		int s=read();
+		memset(dis,0x3f,sizeof(dis));
+		dis[s]=0;
+		for(int k=1;k<=n-1;k++)
+			for(int i=1;i<cnt;i++)
+				if(dis[edg[i].v]>dis[edg[i].u]+edg[i].w)
+					dis[edg[i].v]=dis[edg[i].u]+edg[i].w;
+	}
+	void SPFA(){
+		memset(dis,0x3f,sizeof(dis));
+		memset(vis,0,sizeof(vis));
+		int s=read();dis[s]=0;vis[s]=1;
+		std::queue<int> q;q.push(s);
+		while(!q.empty()){
+			int k=head[q.front()];
+			while(k!=-1){
+				if(dis[edg[k].v]>dis[edg[k].u]+edg[k].w){
+					dis[edg[k].v]=dis[edg[k].u]+edg[k].w;
+					if(!vis[edg[k].v]){
+						q.push(edg[k].v);
+						vis[edg[k].v]=true;
+					}
+				}
+				k=edg[k].nxt;
+			}
+			q.pop();
+		}
+	}
+	int minor_circle_floyd(){
+		int ans=inf;
+		for(int k=1;k<=n;k++)
+			for(int i=1;i<k;i++)
+				for(int j=i+1;j<k;j++)
+					ans=gmin(ans,g[i][k]+g[k][j]+g[i][j]);
+		return ans;
+	}
 };
 
 int main(){
