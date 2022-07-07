@@ -168,7 +168,7 @@ public:
 		finv(mod,n);
 		ifac[0]=1;
 		for(int i=1;i<=n;i++)
-			ifac[i]=ifac[i-1]*inv[i];
+			ifac[i]=ifac[i-1]*inv[i]%mod;
 	}
 	int Combination(int n,int k,int mod){
 		factor(mod,n);fifac(mod,n);
