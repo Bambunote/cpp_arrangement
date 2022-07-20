@@ -179,71 +179,23 @@ public:
     }
 }math;
 
-class sorts{
+class range{
 public:
-	int a[2<<10],b[2<<10],n,ans;
-	bool excute(){
-		puts("input n,a[]");
-		puts("n<=1024,a[]::int");
-		printf("n:");scanf("%d",&n);
-		printf("a[]:");
-		for(int i=1;i<=n;i++)
-			scanf("%d",&a[i]);
-		exch();Mergesort();
-		exch();Quicksort();
-		exch();Composort();
-		return true;
-	}
-private:
-	void exch(){
-		sl();
-		sl();
-		cl();
-		outpt();
-	}
-	void outpt(){
-		printf("%d\n",n);
-		for(int i=1;i<=n;i++)
-			printf("%d ",a[i]);
-		printf("\n\n");
-	}
-	void Mergesort(){
-		int ans=0;
-		merger(1,n);
-		printf("There is %d inversions\n",ans);
-		en();
-	}
-	void merger(int l,int r){
+	static const int N=2010;
+	range(){n=0;memset(a,0,sizeof(a));}
+	void merger(int l,int r,int *b,int& inv){
 		if(l==r)return;
-		int i=l,m=(l+r)/2,j=m+1,g=0;
-		merger(l,m);merger(m+1,r);
+		int m=(l+r)/2,i=l,j=m+1,g=0;
+		merger(l,m,b,inv);merger(m+1,r,b,inv);
 		while(i<=m&&j<=r)
-			if(a[i]<=a[j])
-				b[++g]=a[i++];
-			else
-				b[++g]=a[j++],ans=ans+m-i+1;
+			if(a[i]<=a[j])b[++g]=a[i++];
+			else b[++g]=a[j++],inv=inv+m-i+1;
 		while(i<=m)b[++g]=a[i++];
 		while(j<=r)b[++g]=a[j++];
 		for(int i=1;i<=g;i++)a[i+l-1]=b[i];
 	}
-	void Quicksort(){
-		quicker(1,n);
-	}
-	void quicker(int l,int r){
-		int i=l,j=r,m=a[(l+r)/2];
-		do{
-			while(a[i]<m)i++;
-			while(a[j]>m)j--;
-			if(i<=j)
-				sswap(a[i++],a[j--]);
-		}while(i<=j);
-		if(l<j)quicker(l,j);
-		if(i<r)quicker(i,r);
-	}
-	void Composort(){
-		puts("look out sort.png");
-		return;
-	}
+private:
+	int a[N],n;
 };
 
 class bags{
