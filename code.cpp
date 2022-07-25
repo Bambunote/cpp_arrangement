@@ -998,6 +998,50 @@ public:
 	}
 };
 
+class Linear_Basis{
+public:
+	const static int N=31;
+	int b[N],nb[N],tot;
+	Linear_Basis(){
+		tot=0;
+		memset(b,0,sizeof(b));
+		memset(nb,0,sizeof(nb));
+	}
+	bool ins(int x){
+		for(int i=N;i>=0;i--)
+		if(x&(1<<i)){
+			if(!b[i]){b[i]=x;break;}
+			x^=b[i];
+		}
+		return x>0;
+	}
+	int Max(int x){
+		int res=x;
+		for(int i=62;i>=0;i--)
+		res=gmax(res,res^b[i]);
+		return res;
+	}
+	int Min(int x){
+		int res=x;
+		for(int i=0;i<=N;i++)
+		if(b[i])res^=b[i];
+		return res;
+	}
+	void rebuild(){
+		for(int i=N;i>=0;i--)
+			for(int j=i-1;j>=0;j--)
+				if(b[i]&(1<<j))b[i]^=b[j];
+			for(int i=0;i<=N;i++)
+				if(b[i])nb[tot++]=b[i];
+	}
+	int Kth_Max(int k){
+		int res=0;
+		for(int i=N;i>=0;i--)
+		if (k&(1<<i))res^=nb[i];
+		return res;
+	}
+};
+
 int main(){
 	srand(time(0));//for rrand
 	return 0;
